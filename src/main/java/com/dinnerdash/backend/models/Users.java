@@ -14,7 +14,7 @@ import jakarta.validation.constraints.*;
 public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@NotBlank
 	@Size(max = 20)
@@ -42,10 +42,10 @@ public class Users {
 		this.email = email;
 		this.password = password;
 	}
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUsername() {

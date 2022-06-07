@@ -23,9 +23,6 @@ public class BackendApplication implements CommandLineRunner{
 
 	@Override
     public void run(String... args) throws Exception {
-        String sql = "SELECT * FROM Customer";
-        List<Customer> customers = jdbc.query(sql,
-                BeanPropertyRowMapper.newInstance(Customer.class));
-        customers.forEach(System.out :: println);
+        
     }
 }

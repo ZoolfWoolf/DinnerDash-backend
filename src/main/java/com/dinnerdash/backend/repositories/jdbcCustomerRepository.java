@@ -17,8 +17,8 @@ public class jdbcCustomerRepository implements CustomerRepository{
 
     @Override
     public int save(Customer customer) {
-        return db.update("Insert into Customer (CustomerID, CustomerName, UserName, Password, WalletAmount, PhoneNumber, Email) values (?,?,?,?,?,?,?)",
-        customer.getCustomerID(), customer.getCustomerName(), customer.getUsername(), customer.getPassword(), customer.getWalletAmount(), customer.getPhoneNumber(), customer.getEmail());
+        return db.update("Insert into Customer (CustomerID, WalletAmount, PhoneNumber) values (?,?,?)",
+        customer.getCustomerID(), customer.getWalletAmount(), customer.getPhoneNumber());
     }
 
     @Override
