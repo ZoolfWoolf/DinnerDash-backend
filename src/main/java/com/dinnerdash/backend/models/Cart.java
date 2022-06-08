@@ -1,41 +1,42 @@
 package com.dinnerdash.backend.models;
 
 public class Cart {
-    private int CustomerID;
-    private int OfferingID;
-    private int Quantity;
+    private int customerId;
+    private int offeringId;
+    private int quantity;
 
     Cart(){
     }
 
-    public Cart(int CustomerID, int OfferingID, int Quantity){
-        this.CustomerID = CustomerID;
-        this.OfferingID = OfferingID;
-        this.Quantity = Quantity;
+
+    public Cart(int customerId, int offeringId, int quantity) {
+        this.customerId = customerId;
+        this.offeringId = offeringId;
+        this.quantity = quantity;
     }
 
-    public int getCustomerID() {
-        return this.CustomerID;
+    public int getCustomerId() {
+        return this.customerId;
     }
 
-    public void setCustomerID(int CustomerID) {
-        this.CustomerID = CustomerID;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
-    public int getOfferingID() {
-        return this.OfferingID;
+    public int getOfferingId() {
+        return this.offeringId;
     }
 
-    public void setOfferingID(int OfferingID) {
-        this.OfferingID = OfferingID;
+    public void setOfferingId(int offeringId) {
+        this.offeringId = offeringId;
     }
 
     public int getQuantity() {
-        return this.Quantity;
+        return this.quantity;
     }
 
-    public void setQuantity(int Quantity) {
-        this.Quantity = Quantity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
     
 }

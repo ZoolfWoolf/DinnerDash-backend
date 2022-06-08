@@ -11,8 +11,7 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(int orderId, int customerId, int resId, String time, String paymentMethod, String status) {
-        this.orderId = orderId;
+    public Orders(int customerId, int resId, String time, String paymentMethod, String status) {
         this.customerId = customerId;
         this.time = time;
         this.restaurantId = resId;

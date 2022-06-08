@@ -20,8 +20,8 @@ public class jdbcOrdersRepository implements OrdersRepository {
     @Override
     public int save(Orders order) {
         return db.update(
-                "Insert into Orders (OrderID, CustomerID, RestaurantID, OrderTime, PaymentMethod, OrderStatus) values (?,?,?,?,?,?)",
-                order.getOrderId(), order.getCustomerId(), order.getRestaurantId(),
+                "Insert into Orders (CustomerID, RestaurantID, OrderTime, PaymentMethod, OrderStatus) values (?,?,?,?,?,?)",
+                order.getCustomerId(), order.getRestaurantId(),
                 order.getTime(), order.getPaymentMethod(), order.getStatus());
     }
 

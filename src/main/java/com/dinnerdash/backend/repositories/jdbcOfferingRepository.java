@@ -25,9 +25,9 @@ public class jdbcOfferingRepository implements OfferingRepository {
     @Override
     public int save(Offering offering) {
         return db.update(
-                "Insert into Offering (OfferingID, RestaurantID, OfferingName, OfferingDescription, Price, OfferingPhotoURL) values (?,?,?,?,?,?)",
-                offering.getOfferingID(), offering.getRestaurantID(), offering.getOfferingName(),
-                offering.getOfferingDescription(), offering.getPrice(), offering.getUrl());
+                "Insert into Offering (RestaurantID, OfferingName, OfferingDescription, Price, OfferingPhotoURL) values (?,?,?,?,?)",
+                offering.getRestaurantId(), offering.getOfferingName(),
+                offering.getOfferingDescription(), offering.getPrice(), offering.getOfferingPhotoUrl());
     }
 
     @Override
@@ -38,8 +38,9 @@ public class jdbcOfferingRepository implements OfferingRepository {
 
     @Override
     public int modify(Offering offering) {
-        return db.update("update Offering set OfferingName=?, OfferingDescription=?, Price=?, OfferingPhotoURL=? where OfferingID=?, RestaurantID=?", 
-        offering.getOfferingName(), offering.getOfferingDescription(), offering.getPrice(), offering.getUrl(), offering.getOfferingID(), offering.getRestaurantID());
+        System.out.println(offering.getOfferingId());
+        return db.update("update Offering set OfferingName=?, OfferingDescription=?, Price=?, OfferingPhotoURL=? where OfferingID=? AND RestaurantID=?", 
+        offering.getOfferingName(), offering.getOfferingDescription(), offering.getPrice(), offering.getOfferingPhotoUrl(), offering.getOfferingId(), offering.getRestaurantId());
     }
 
 }

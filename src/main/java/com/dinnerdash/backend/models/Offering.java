@@ -1,35 +1,38 @@
 package com.dinnerdash.backend.models;
 
 public class Offering {
-    int offeringID;
-    int restaurantID;
+    int offeringId;
+    int restaurantId;
     String offeringName;
     String offeringDescription;
     int price;
-    String url;
+    String offeringPhotoUrl;
 
     Offering(){
     }
 
-    public Offering(int offeringID2, int userId, String offeringName2, String offeringDescription2, int price2,
-            String url2) {
+    public Offering(int restaurantID, String offeringName, String offeringDescription, int price, String url) {
+        this.restaurantId = restaurantID;
+        this.offeringName = offeringName;
+        this.offeringDescription = offeringDescription;
+        this.price = price;
+        this.offeringPhotoUrl = url;
     }
 
-
-    public int getOfferingID() {
-        return this.offeringID;
+    public int getOfferingId() {
+        return this.offeringId;
     }
 
-    public void setOfferingID(int offeringID) {
-        this.offeringID = offeringID;
+    public void setOfferingId(int offeringID) {
+        this.offeringId = offeringID;
     }
 
-    public int getRestaurantID() {
-        return this.restaurantID;
+    public int getRestaurantId() {
+        return this.restaurantId;
     }
 
-    public void setRestaurantID(int restaurantID) {
-        this.restaurantID = restaurantID;
+    public void setRestaurantId(int restaurantID) {
+        this.restaurantId = restaurantID;
     }
 
     public String getOfferingName() {
@@ -56,12 +59,13 @@ public class Offering {
         this.price = price;
     }
 
-    public String getUrl() {
-        return this.url;
+
+    public String getOfferingPhotoUrl() {
+        return this.offeringPhotoUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setOfferingPhotoUrl(String offeringPhotoUrl) {
+        this.offeringPhotoUrl = offeringPhotoUrl;
     }
 
 }

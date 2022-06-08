@@ -1,7 +1,6 @@
 package com.dinnerdash.backend.controllers;
 
-import com.dinnerdash.backend.models.Cart;
-import com.dinnerdash.backend.payload.request.AddToCartRequest;
+import com.dinnerdash.backend.models.Cart;  
 import com.dinnerdash.backend.repositories.CartRepository;
 import com.dinnerdash.backend.security.services.UserDetailsImpl;
 
@@ -47,9 +46,9 @@ public class CartController {
     }
 
     @PostMapping(value="/addToCart")
-    public int addItem(@RequestBody AddToCartRequest addToCart){
+    public int addItem(@RequestBody Cart addToCart){
         int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        return cartRepository.save(new Cart(userId, addToCart.getOfferingID(), addToCart.getQuantity()));
+        return cartRepository.save(new Cart(userId, addToCart.getOfferingId(), addToCart.getQuantity()));
     }
 
 }

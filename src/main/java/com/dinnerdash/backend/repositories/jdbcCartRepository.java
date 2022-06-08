@@ -20,7 +20,7 @@ public class jdbcCartRepository implements CartRepository{
     @Override
     public int save(Cart cart) {
         return db.update("Insert into Cart (CustomerID, OfferingID, Quantity) values (?,?,?)",
-        cart.getCustomerID(), cart.getOfferingID(), cart.getQuantity());
+        cart.getCustomerId(), cart.getOfferingId(), cart.getQuantity());
     }
 
     @Override

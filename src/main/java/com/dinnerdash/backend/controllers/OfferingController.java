@@ -52,7 +52,7 @@ public class OfferingController {
         System.out.println(addToCart.getOfferingDescription());
         System.out.println(userId);
 
-        Offering temp = new Offering(addToCart.getOfferingID(), userId, addToCart.getOfferingName(), addToCart.getOfferingDescription(),addToCart.getPrice(), addToCart.getUrl());
+        Offering temp = new Offering(userId, addToCart.getOfferingName(), addToCart.getOfferingDescription(),addToCart.getPrice(), addToCart.getOfferingPhotoUrl());
         try{
             offeringRepository.save(temp);
         }
@@ -68,7 +68,8 @@ public class OfferingController {
         System.out.println(userId);
 
         int res = 0;
-        Offering temp = new Offering(addToCart.getOfferingID(), userId, addToCart.getOfferingName(), addToCart.getOfferingDescription(),addToCart.getPrice(), addToCart.getUrl());
+        Offering temp = new Offering(userId, addToCart.getOfferingName(), addToCart.getOfferingDescription(),addToCart.getPrice(), addToCart.getOfferingPhotoUrl());
+        temp.setOfferingId(addToCart.getOfferingId());
         try{
             res = offeringRepository.modify(temp);
         }
