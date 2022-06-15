@@ -1,9 +1,9 @@
 package com.dinnerdash.backend.models;
-
 public class Customer {
+    private String PhoneNumber;
+
     private int CustomerID;
     private int WalletAmount;
-    private String PhoneNumber;
 
     
     Customer(){

@@ -2,18 +2,19 @@ package com.dinnerdash.backend.models;
 
 public class Restaurant {
     private int restaurantId;
-    private String name;
-    private String theme;
-    private String url;
+    private String restaurantName;
+    private String colorTheme;
+    private String bannerUrl;
     
     public Restaurant(){
     }
 
-    public Restaurant(int id, String name, String theme, String url){
-        this.restaurantId = id;
-        this.name = name;
-        this.theme = theme;
-        this.url = url;
+
+    public Restaurant(int restaurantId, String restaurantName, String colorTheme, String bannerUrl) {
+        this.restaurantId = restaurantId;
+        this.restaurantName = restaurantName;
+        this.colorTheme = colorTheme;
+        this.bannerUrl = bannerUrl;
     }
 
     public int getRestaurantId() {
@@ -24,29 +25,29 @@ public class Restaurant {
         this.restaurantId = restaurantId;
     }
 
-    public String getName() {
-        return this.name;
+    public String getRestaurantName() {
+        return this.restaurantName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
     }
 
-    public String getTheme() {
-        return this.theme;
+    public String getColorTheme() {
+        return this.colorTheme;
     }
 
-    public void setTheme(String theme) {
-        this.theme = theme;
+    public void setColorTheme(String colorTheme) {
+        this.colorTheme = colorTheme;
     }
 
-    public String getUrl() {
-        return this.url;
+    public String getBannerUrl() {
+        return this.bannerUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setBannerUrl(String bannerUrl) {
+        this.bannerUrl = bannerUrl;
     }
-
+    
 
 }

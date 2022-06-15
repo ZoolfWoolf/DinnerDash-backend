@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,8 +24,9 @@ import com.dinnerdash.backend.models.ERoles;
 import com.dinnerdash.backend.models.Restaurant;
 import com.dinnerdash.backend.models.Roles;
 import com.dinnerdash.backend.models.Users;
+import com.dinnerdash.backend.payload.request.CustomerSignupRequest;
 import com.dinnerdash.backend.payload.request.LoginRequest;
-import com.dinnerdash.backend.payload.request.SignupRequest;
+import com.dinnerdash.backend.payload.request.RestaurantSignupRequest;
 import com.dinnerdash.backend.payload.response.JwtResponse;
 import com.dinnerdash.backend.payload.response.MessageResponse;
 import com.dinnerdash.backend.repositories.CustomerRepository;
@@ -69,57 +71,64 @@ public class AuthController {
 												 userDetails.getEmail(), 
 												 roles));
 	}
-	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+	@PostMapping("/customerSignup")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody CustomerSignupRequest signUpRequest) {
+		ResponseEntity<?> checkIfAlreadyExists = signupHelper(signUpRequest.getUsername(), signUpRequest.getEmail());
+		if (checkIfAlreadyExists != null){
+			return checkIfAlreadyExists;
+		}
+		
+		//Making customer
+		Customer temp = new Customer(0, signUpRequest.getWalletAmount(), signUpRequest.getPhoneNumber());
+		Users user = userMaker(signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPassword(), ERoles.ROLE_CUSTOMER);
+		userRepository.save(user);
+		temp.setCustomerID(user.getId());
+		customer.save(temp);
+		return ResponseEntity.ok(new MessageResponse("Customer registered successfully!"));
+	}
+
+	@PostMapping("/restaurantSignup")
+	public ResponseEntity<?> registerRestaurant(@Valid @RequestBody RestaurantSignupRequest signUpRequest) {
+		ResponseEntity<?> checkIfAlreadyExists = signupHelper(signUpRequest.getUsername(), signUpRequest.getEmail());
+		if (checkIfAlreadyExists != null){
+			return checkIfAlreadyExists;
+		}
+
+		//Making restaurant.
+		Restaurant temp = new Restaurant(0, signUpRequest.getName(), signUpRequest.getTheme(), signUpRequest.getUrl());
+		Users user = userMaker(signUpRequest.getUsername(), signUpRequest.getEmail(), signUpRequest.getPassword(), ERoles.ROLE_RESTAURANT);
+		userRepository.save(user);
+		temp.setRestaurantId(user.getId());
+		restaurant.save(temp);
+		return ResponseEntity.ok(new MessageResponse("Restaurant registered successfully!"));
+	}
+
+	private ResponseEntity<?> signupHelper(String username, String email) {
+		if (userRepository.existsByUsername(username)) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+		if (userRepository.existsByEmail(email)) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
-		// Create new user's account
-		Users user = new Users(signUpRequest.getUsername(), 
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
-		Set<String> strRoles = signUpRequest.getRole();
-		Set<Roles> roles = new HashSet<>();
-		if (strRoles == null) {
-			Roles userRole = roleRepository.findByName(ERoles.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(userRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-				case "restaurant":
-					Roles restaurantRole = roleRepository.findByName(ERoles.ROLE_RESTAURANT)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(restaurantRole);
-					break;
-				case "customer":
-					Roles userRole = roleRepository.findByName(ERoles.ROLE_CUSTOMER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(userRole);
-					break;
-				default :
-				}
-			});
-		}
-		
-		user.setRoles(roles);
-		userRepository.save(user);
-		ERoles temp = roles.iterator().next().getName();
+		return null;
+	}
 
-		if (temp == ERoles.ROLE_CUSTOMER){
-			customer.save(new Customer(user.getId(), 1000, "03004244221"));
-		}
-		else if (temp == ERoles.ROLE_RESTAURANT){
-			restaurant.save(new Restaurant(user.getId(), "Butt Karahi", "Black", "wow.com"));
-		}
-		
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	private Users userMaker(String username, String email, String password, ERoles role){
+		// Create new user's account
+		Users user = new Users(username, 
+							 email,
+							 encoder.encode(password));
+
+		Set<Roles> roles = new HashSet<>();
+		Roles restaurantRole = roleRepository.findByName(role)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+							
+		roles.add(restaurantRole);
+		user.setRoles(roles);
+		return user;
 	}
 }

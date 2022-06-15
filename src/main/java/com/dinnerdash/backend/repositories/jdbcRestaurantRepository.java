@@ -1,6 +1,9 @@
 package com.dinnerdash.backend.repositories;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,14 +21,19 @@ public class jdbcRestaurantRepository implements RestaurantRepository {
     public int save(Restaurant res) {
         return db.update(
                 "Insert into Restaurant (RestaurantID, RestaurantName, ColorTheme, BannerUrl) values (?,?,?,?)",
-                res.getRestaurantId(), res.getName(),
-                res.getTheme(), res.getUrl());
+                res.getRestaurantId(), res.getRestaurantName(),
+                res.getColorTheme(), res.getBannerUrl());
     }
 
     @Override
     public int modify(Restaurant res) {
         return db.update(
             "Update Restaurant RestaurantName=?, ColorTheme=?, BannerUrl=? where RestaurantID=?",
-            res.getName(),res.getTheme(), res.getUrl(), res.getRestaurantId());
+            res.getRestaurantName(),res.getColorTheme(), res.getBannerUrl(), res.getRestaurantId());
+    }
+
+    @Override
+    public List<Restaurant> findAll() {
+        return db.query("SELECT * FROM Restaurant", BeanPropertyRowMapper.newInstance(Restaurant.class));
     }
 }

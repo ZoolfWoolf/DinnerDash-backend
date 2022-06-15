@@ -20,19 +20,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/offering")
-@PreAuthorize("hasRole('RESTAURANT')")
 public class OfferingController {
     @Autowired
     OfferingRepository offeringRepository; //Will automatically attach an object which implements this interface.
 
-    @GetMapping(value="/getAllOfferings")
-    public ResponseEntity<List<Offering>> getAllItems() {
+    @GetMapping(value="/getAllOfferings/{restaurantId}")
+    public ResponseEntity<List<Offering>> getAllItems(@PathVariable("restaurantId") int restaurantId) {
         //Getting the ID of the logged in user.
         System.out.println("GET ALL OFFERINGS");
-        int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        //int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         return new ResponseEntity<>(offeringRepository.findByRestaurant(restaurantId), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('RESTAURANT')")
     @PostMapping(value="/removeOffering/{offeringId}")
     public ResponseEntity<Integer> removeItem(@PathVariable("offeringId") int offeringId){
         int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -46,6 +46,7 @@ public class OfferingController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('RESTAURANT')")
     @PostMapping(value="/addOffering")
     public ResponseEntity<Offering> addItem(@RequestBody Offering addToCart){
         int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
@@ -61,6 +62,7 @@ public class OfferingController {
         return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('RESTAURANT')")
     @PostMapping(value="/modifyOffering")
     public ResponseEntity<Integer> modifyItem(@RequestBody Offering addToCart){
         int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
