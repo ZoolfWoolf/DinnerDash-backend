@@ -44,13 +44,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-    
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-    //Here we can configure cors, filters and whether we want to authorize all rquests with tokens or not.
+	// Here we can configure cors, filters and whether we want to authorize all
+	// rquests with tokens or not.
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
