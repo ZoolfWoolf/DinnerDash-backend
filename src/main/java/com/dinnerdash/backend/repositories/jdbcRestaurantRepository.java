@@ -28,8 +28,8 @@ public class jdbcRestaurantRepository implements RestaurantRepository {
     @Override
     public int modify(Restaurant res) {
         return db.update(
-            "Update Restaurant RestaurantName=?, ColorTheme=?, BannerUrl=? where RestaurantID=?",
-            res.getRestaurantName(),res.getColorTheme(), res.getBannerUrl(), res.getRestaurantId());
+                "Update Restaurant set RestaurantName=?, ColorTheme=?, BannerUrl=? where RestaurantID=?",
+                res.getRestaurantName(), res.getColorTheme(), res.getBannerUrl(), res.getRestaurantId());
     }
 
     @Override
@@ -39,6 +39,7 @@ public class jdbcRestaurantRepository implements RestaurantRepository {
 
     @Override
     public Restaurant getById(int id) {
-        return db.queryForObject("Select * from Restaurant where RestaurantID=?", BeanPropertyRowMapper.newInstance(Restaurant.class), id);
+        return db.queryForObject("Select * from Restaurant where RestaurantID=?",
+                BeanPropertyRowMapper.newInstance(Restaurant.class), id);
     }
 }

@@ -1,6 +1,7 @@
 package com.dinnerdash.backend.models;
 
 public class Offering {
+    public int id;// dummy
     int offeringId;
     int restaurantId;
     String offeringName;
@@ -8,7 +9,7 @@ public class Offering {
     int price;
     String offeringPhotoUrl;
 
-    Offering(){
+    Offering() {
     }
 
     public Offering(int restaurantID, String offeringName, String offeringDescription, int price, String url) {
@@ -25,6 +26,7 @@ public class Offering {
 
     public void setOfferingId(int offeringID) {
         this.offeringId = offeringID;
+        this.id = offeringID;
     }
 
     public int getRestaurantId() {
@@ -58,7 +60,6 @@ public class Offering {
     public void setPrice(int price) {
         this.price = price;
     }
-
 
     public String getOfferingPhotoUrl() {
         return this.offeringPhotoUrl;

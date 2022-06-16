@@ -37,10 +37,18 @@ public class jdbcOfferingRepository implements OfferingRepository {
     }
 
     @Override
+    public Offering findById(int offeringId, int restaurantId) {
+        return db.queryForObject("Select * from Offering where OfferingId=? AND RestaurantID=?",
+                BeanPropertyRowMapper.newInstance(Offering.class), offeringId, restaurantId);
+    }
+
+    @Override
     public int modify(Offering offering) {
         System.out.println(offering.getOfferingId());
-        return db.update("update Offering set OfferingName=?, OfferingDescription=?, Price=?, OfferingPhotoURL=? where OfferingID=? AND RestaurantID=?", 
-        offering.getOfferingName(), offering.getOfferingDescription(), offering.getPrice(), offering.getOfferingPhotoUrl(), offering.getOfferingId(), offering.getRestaurantId());
+        return db.update(
+                "update Offering set OfferingName=?, OfferingDescription=?, Price=?, OfferingPhotoURL=? where OfferingID=? AND RestaurantID=?",
+                offering.getOfferingName(), offering.getOfferingDescription(), offering.getPrice(),
+                offering.getOfferingPhotoUrl(), offering.getOfferingId(), offering.getRestaurantId());
     }
 
 }

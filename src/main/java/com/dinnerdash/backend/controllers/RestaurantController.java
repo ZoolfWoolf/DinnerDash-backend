@@ -6,38 +6,56 @@ import com.dinnerdash.backend.repositories.RestaurantRepository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/restaurant")
+@RequestMapping("/api/restaurants")
 public class RestaurantController {
     @Autowired
-    RestaurantRepository restaurantRepository; //Will automatically attach an object which implements this interface.
+    RestaurantRepository restaurantRepository; // Will automatically attach an object which implements this interface.
 
-    @PostMapping("/changeDetails")
-    public int changeRestaurantDetails(@RequestBody Restaurant restaurant){
-        return restaurantRepository.modify(restaurant);
+    @PostMapping("/{id}")
+    public ResponseEntity<Restaurant> changeRestaurantDetails(@RequestBody Restaurant restaurant) {
+        restaurantRepository.modify(restaurant);
+        return getById(restaurant.id);
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<Restaurant>> getAll(){
+    @PutMapping("/{id}")
+    public ResponseEntity<Restaurant> changeRestaurantDetailsPut(@RequestBody Restaurant restaurant) {
+        return changeRestaurantDetails(restaurant);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Restaurant>> getAll() {
         System.out.println("GET ALL Restaurants");
-        return new ResponseEntity<>(restaurantRepository.findAll(), HttpStatus.OK);        
+
+        List<Restaurant> list = restaurantRepository.findAll();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Access-Control-Expose-Headers", "Content-Range");
+        headers.set("Content-Range", "restaurants " + list.size() + "/" + list.size());
+
+        return new ResponseEntity<>(list, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/getById/{ID}")
-    public ResponseEntity<Restaurant> getById(@PathVariable("ID") int id){
+    @GetMapping("")
+    public ResponseEntity<List<Restaurant>> getAll2() {
+        return getAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Restaurant> getById(@PathVariable("id") int id) {
         System.out.println("GET Restaurant By ID");
-        return new ResponseEntity<>(restaurantRepository.getById(id), HttpStatus.OK);        
+        return new ResponseEntity<>(restaurantRepository.getById(id), HttpStatus.OK);
     }
 }
-
