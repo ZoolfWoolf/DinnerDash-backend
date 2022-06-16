@@ -32,5 +32,19 @@ public class jdbcCustomerRepository implements CustomerRepository{
     public List<Customer> findAll() {
         return db.query("Select * from Customer", BeanPropertyRowMapper.newInstance(Customer.class));
     }
+
+    @Override
+    public int addMoney(int id, int amount) {
+        return db.update("Update Customer set WalletAmount = WalletAmount + ? where CustomerID=?", amount, id);
+    }
+
+    @Override
+    public int removeMoney(int id, int amount) {
+        int money = db.queryForObject("Select WalletAmount From Customer where CustomerID=?", Integer.class , id);
+        if (money <= amount){
+            money = 0;
+        }
+        return db.update("Update Customer set WalletAmount = WalletAmount + ? where CustomerID=?", money, id);
+    }
     
 }

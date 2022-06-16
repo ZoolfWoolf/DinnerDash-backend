@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,4 +33,11 @@ public class RestaurantController {
         System.out.println("GET ALL Restaurants");
         return new ResponseEntity<>(restaurantRepository.findAll(), HttpStatus.OK);        
     }
+
+    @GetMapping("/getById/{ID}")
+    public ResponseEntity<Restaurant> getById(@PathVariable("ID") int id){
+        System.out.println("GET Restaurant By ID");
+        return new ResponseEntity<>(restaurantRepository.getById(id), HttpStatus.OK);        
+    }
 }
+

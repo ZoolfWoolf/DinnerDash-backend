@@ -9,4 +9,6 @@ public interface CustomerRepository {
     int save(Customer customer);
     Customer findById(int id);
     List<Customer> findAll();
+    int addMoney(int id, int amount);
+    int removeMoney(int id, int amount);
 }

@@ -36,4 +36,9 @@ public class jdbcRestaurantRepository implements RestaurantRepository {
     public List<Restaurant> findAll() {
         return db.query("SELECT * FROM Restaurant", BeanPropertyRowMapper.newInstance(Restaurant.class));
     }
+
+    @Override
+    public Restaurant getById(int id) {
+        return db.queryForObject("Select * from Restaurant where RestaurantID=?", BeanPropertyRowMapper.newInstance(Restaurant.class), id);
+    }
 }

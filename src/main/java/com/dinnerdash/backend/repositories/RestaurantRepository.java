@@ -9,4 +9,5 @@ public interface RestaurantRepository {
     int save(Restaurant res);
     int modify(Restaurant res);
     List<Restaurant> findAll();
+    Restaurant getById(int id);
 }
