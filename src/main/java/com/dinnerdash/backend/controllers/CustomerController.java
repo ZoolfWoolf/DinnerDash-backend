@@ -39,21 +39,29 @@ public class CustomerController {
         Customer c = customerRepository.findById(id);
         Users u = userRepository.findById(id);
         System.out.println(u);
-        
+
         if (c != null) {
-            return new ResponseEntity<UserResponse>(new UserResponse(u.getUsername(), u.getEmail(), c.getPhoneNumber(), c.getWalletAmount()), HttpStatus.OK);
+            return new ResponseEntity<UserResponse>(
+                    new UserResponse(u.getUsername(), u.getEmail(), c.getPhoneNumber(), c.getWalletAmount()),
+                    HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getUser")
     public ResponseEntity<Customer> getCustomerbyID() {
-        int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        Customer c = customerRepository.findById(userId);
-        if (c != null) {
-            return new ResponseEntity<Customer>(c, HttpStatus.OK);
+        try {
+            int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getId();
+            Customer c = customerRepository.findById(userId);
+            if (c != null) {
+                return new ResponseEntity<Customer>(c, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     @PostMapping("/removeMoney/{Amount}")
