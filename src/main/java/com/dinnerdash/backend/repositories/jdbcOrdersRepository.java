@@ -48,4 +48,9 @@ public class jdbcOrdersRepository implements OrdersRepository {
         return db.update("Update Orders set OrderStatus=? where OrderID=?", status, orderId);
     }
 
+    @Override
+    public Orders findById(int orderId) {
+       return db.queryForObject("Select * from Orders where OrderID=?", BeanPropertyRowMapper.newInstance(Orders.class), orderId);
+    }
+
 }

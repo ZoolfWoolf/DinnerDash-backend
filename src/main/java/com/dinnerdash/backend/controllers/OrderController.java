@@ -50,6 +50,17 @@ public class OrderController {
         return new ResponseEntity<List<OrderResponse>>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> getByOrder(@PathVariable("orderId") int id){
+        Orders order = ordersRepository.findById(id);
+        OrderResponse res = new OrderResponse();
+
+        res.setOrder(order);
+        res.setItems(orderItemsRepository.findByOrder(order.getOrderId()));
+
+        return new ResponseEntity<OrderResponse>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/getByRestaurant/{resId}")
     public ResponseEntity<List<OrderResponse>> getByRestaurant(@PathVariable("resId") int id){
         List<Orders> orders = ordersRepository.findByRestaurant(id);

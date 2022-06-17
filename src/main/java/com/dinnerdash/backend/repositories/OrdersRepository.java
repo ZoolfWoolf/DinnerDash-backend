@@ -10,6 +10,8 @@ public interface OrdersRepository {
 
     List<Orders> findByRestaurant(int restaurantId);
 
+    Orders findById(int orderId);
+
     List<Orders> findByCustomer(int customerId);
 
     int remove(int orderId);
