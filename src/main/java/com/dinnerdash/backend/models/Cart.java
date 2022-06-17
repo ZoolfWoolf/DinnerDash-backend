@@ -5,9 +5,8 @@ public class Cart {
     private int offeringId;
     private int quantity;
 
-    Cart(){
+    Cart() {
     }
-
 
     public Cart(int customerId, int offeringId, int quantity) {
         this.customerId = customerId;
@@ -38,5 +37,5 @@ public class Cart {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
+
 }

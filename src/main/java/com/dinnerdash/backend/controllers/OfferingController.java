@@ -88,9 +88,15 @@ public class OfferingController {
     public ResponseEntity<List<Offering>> getAllItems() {
         // Getting the ID of the logged in user.
         System.out.println("GET ALL OFFERINGS");
-        int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getId();
-        List<Offering> list = offeringRepository.findByRestaurant(restaurantId);
+        List<Offering> list;
+        try {
+            int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getId();
+            list = offeringRepository.findByRestaurant(restaurantId);
+        } catch (Exception e) {
+            list = offeringRepository.findAll();
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Access-Control-Expose-Headers", "Content-Range");
         headers.set("Content-Range", "offerings " + list.size() + "/" + list.size());
@@ -104,18 +110,28 @@ public class OfferingController {
         return response;
     }
 
-    @GetMapping(value = "/{restaurantId}/{offeringId}")
-    public ResponseEntity<Offering> getOne(@PathVariable("restaurantId") int resid, @PathVariable("offeringId") int id) {
-        // Getting the ID of the logged in user.
-        System.out.println("GET ONE OFFERING " + id);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Offering> getOne(@PathVariable("id") int id) {
+        try {
+            int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getId();
+            return getOne(restaurantId, id);
+        } catch (Exception e) {
+            System.out.println("GET ONE OFFERING " + id);
 
-        int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getId();
-        Offering o = offeringRepository.findById(id, resid);
-        if (o != null) {
-            return new ResponseEntity<Offering>(o, HttpStatus.OK);
+            Offering o = offeringRepository.findById(id);
+            if (o != null) {
+                return new ResponseEntity<Offering>(o, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // create
+    @PreAuthorize("hasRole('RESTAURANT')")
+    @PostMapping(value = "")
+    public ResponseEntity<Offering> create(@RequestBody Offering offering) {
+        return addItem(offering);
     }
 
     @PreAuthorize("hasRole('RESTAURANT')")
@@ -123,4 +139,18 @@ public class OfferingController {
     public ResponseEntity<Offering> modify(@PathVariable String id, @RequestBody Offering entity) {
         return modifyItem(entity);
     }
+
+    @GetMapping(value = "/{restaurantId}/{offeringId}")
+    public ResponseEntity<Offering> getOne(@PathVariable("restaurantId") int resid,
+            @PathVariable("offeringId") int id) {
+        // Getting the ID of the logged in user.
+        System.out.println("GET ONE OFFERING " + id);
+
+        Offering o = offeringRepository.findById(id, resid);
+        if (o != null) {
+            return new ResponseEntity<Offering>(o, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 }

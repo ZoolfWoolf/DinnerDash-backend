@@ -1,6 +1,6 @@
 package com.dinnerdash.backend.controllers;
 
-import com.dinnerdash.backend.models.Cart;  
+import com.dinnerdash.backend.models.Cart;
 import com.dinnerdash.backend.repositories.CartRepository;
 import com.dinnerdash.backend.security.services.UserDetailsImpl;
 
@@ -24,30 +24,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 @PreAuthorize("hasRole('CUSTOMER')")
 public class CartController {
     @Autowired
-    CartRepository cartRepository; //Will automatically attach an object which implements this interface.
+    CartRepository cartRepository; // Will automatically attach an object which implements this interface.
 
-    @GetMapping(value="/getAllItems")
+    @GetMapping(value = "/getAllItems")
     public ResponseEntity<List<Cart>> getAllItems() {
-        //Getting the ID of the logged in user.
+        // Getting the ID of the logged in user.
         int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         return new ResponseEntity<>(cartRepository.findByCustomer(userId), HttpStatus.OK);
     }
 
-    @PostMapping(value="/removeItem/{offeringId}")
-    public ResponseEntity<Integer> removeItem(@PathVariable("offeringId") int offeringId){
+    @PostMapping(value = "/removeItem/{offeringId}")
+    public ResponseEntity<Integer> removeItem(@PathVariable("offeringId") int offeringId) {
         int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         System.out.println(offeringId);
         int response = 0;
-        try{
+        try {
             response = cartRepository.remove(userId, offeringId);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(value="/addToCart")
-    public int addItem(@RequestBody Cart addToCart){
+    @PostMapping(value = "/addToCart")
+    public int addItem(@RequestBody Cart addToCart) {
         int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         return cartRepository.save(new Cart(userId, addToCart.getOfferingId(), addToCart.getQuantity()));
     }

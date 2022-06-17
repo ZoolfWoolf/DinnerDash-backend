@@ -7,5 +7,6 @@ import com.dinnerdash.backend.models.OrderItems;
 //All the Customer realated functions.
 public interface OrderItemsRepository {
     int save(OrderItems orderItem);
+
     List<OrderItems> findByOrder(int orderId);
 }

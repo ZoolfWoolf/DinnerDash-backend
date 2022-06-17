@@ -10,7 +10,11 @@ public interface OfferingRepository {
 
     List<Offering> findByRestaurant(int restaurantID);
 
+    List<Offering> findAll();
+
     Offering findById(int offeringId, int restaurantID);
+
+    Offering findById(int offeringId);
 
     int remove(int restaurantId, int offeringId);
 

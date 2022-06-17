@@ -1,15 +1,16 @@
 package com.dinnerdash.backend.models;
-public class Customer {
-    private String PhoneNumber;
 
+public class Customer {
+    public int id;
+    private String PhoneNumber;
     private int CustomerID;
     private int WalletAmount;
 
-    
-    Customer(){
+    Customer() {
     }
 
-    public Customer(int CustomerID, int WalletAmout, String PhoneNumber){
+    public Customer(int CustomerID, int WalletAmout, String PhoneNumber) {
+        this.id = CustomerID;
         this.CustomerID = CustomerID;
         this.WalletAmount = WalletAmout;
         this.PhoneNumber = PhoneNumber;
@@ -35,7 +36,8 @@ public class Customer {
         this.PhoneNumber = PhoneNumber;
     }
 
-    public void setCustomerID(int CustomerID){
+    public void setCustomerID(int CustomerID) {
         this.CustomerID = CustomerID;
+        this.id = CustomerID;
     }
 }

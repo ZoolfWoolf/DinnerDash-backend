@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "roles")
 public class Roles {
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id; //This is primary key
+	private Integer id; // This is primary key
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
@@ -36,7 +36,7 @@ public class Roles {
 	public ERoles getName() {
 		return name;
 	}
-    
+
 	public void setName(ERoles name) {
 		this.name = name;
 	}

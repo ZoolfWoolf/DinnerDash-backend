@@ -35,7 +35,6 @@ public class Orders {
         this.customerId = customerId;
     }
 
-
     public String getTime() {
         return this.time;
     }
@@ -44,7 +43,6 @@ public class Orders {
         this.time = time;
     }
 
-
     public int getRestaurantId() {
         return this.restaurantId;
     }
@@ -52,7 +50,7 @@ public class Orders {
     public void setRestaurantId(int restaurantId) {
         this.restaurantId = restaurantId;
     }
-    
+
     public String getPaymentMethod() {
         return this.paymentMethod;
     }

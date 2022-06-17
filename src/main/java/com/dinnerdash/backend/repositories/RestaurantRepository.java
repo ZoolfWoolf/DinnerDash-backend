@@ -7,7 +7,10 @@ import com.dinnerdash.backend.models.Restaurant;
 //All the Customer realated functions.
 public interface RestaurantRepository {
     int save(Restaurant res);
+
     int modify(Restaurant res);
+
     List<Restaurant> findAll();
+
     Restaurant getById(int id);
 }

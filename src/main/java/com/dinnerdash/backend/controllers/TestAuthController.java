@@ -14,12 +14,13 @@ public class TestAuthController {
 	public String allAccess() {
 		return "Public Content.";
 	}
-	
+
 	@GetMapping("/restaurant")
 	@PreAuthorize("hasRole('RESTAURANT')")
 	public String moderatorAccess() {
 		return "Restaurant Board.";
 	}
+
 	@GetMapping("/customer")
 	@PreAuthorize("hasRole('CUSTOMER')")
 	public String adminAccess() {
