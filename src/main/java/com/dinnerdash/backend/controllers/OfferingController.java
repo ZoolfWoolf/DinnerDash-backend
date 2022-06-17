@@ -104,14 +104,14 @@ public class OfferingController {
         return response;
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Offering> getOne(@PathVariable("id") int id) {
+    @GetMapping(value = "/{restaurantId}/{offeringId}")
+    public ResponseEntity<Offering> getOne(@PathVariable("restaurantId") int resid, @PathVariable("offeringId") int id) {
         // Getting the ID of the logged in user.
         System.out.println("GET ONE OFFERING " + id);
 
         int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getId();
-        Offering o = offeringRepository.findById(id, restaurantId);
+        Offering o = offeringRepository.findById(id, resid);
         if (o != null) {
             return new ResponseEntity<Offering>(o, HttpStatus.OK);
         }
