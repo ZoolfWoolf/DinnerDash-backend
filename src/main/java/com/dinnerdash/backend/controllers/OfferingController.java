@@ -143,10 +143,8 @@ public class OfferingController {
 
     @PreAuthorize("hasRole('RESTAURANT')")
     @DeleteMapping(value = "/{id}")
-    public int delete(@PathVariable("id") int id) {
-        int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
-                .getId();
-        return offeringRepository.remove(restaurantId, id);
+    public ResponseEntity<Integer> delete(@PathVariable("id") int id) {
+        return removeItem(id);
     }
 
     @GetMapping(value = "/{restaurantId}/{offeringId}")
