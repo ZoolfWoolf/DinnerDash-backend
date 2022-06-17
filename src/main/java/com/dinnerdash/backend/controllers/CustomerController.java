@@ -1,7 +1,10 @@
 package com.dinnerdash.backend.controllers;
 
 import com.dinnerdash.backend.models.Customer;
+import com.dinnerdash.backend.models.Users;
+import com.dinnerdash.backend.payload.response.UserResponse;
 import com.dinnerdash.backend.repositories.CustomerRepository;
+import com.dinnerdash.backend.repositories.UserRepository;
 
 import java.util.List;
 
@@ -28,12 +31,17 @@ import com.dinnerdash.backend.security.services.UserDetailsImpl;
 public class CustomerController {
     @Autowired
     CustomerRepository customerRepository; // Will automatically attach an object which implements this interface.
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/getUser/{id}")
-    public ResponseEntity<Customer> getCustomerbyID(@PathVariable("id") int id) {
+    public ResponseEntity<UserResponse> getCustomerbyID(@PathVariable("id") int id) {
         Customer c = customerRepository.findById(id);
+        Users u = userRepository.findById(id);
+        System.out.println(u);
+        
         if (c != null) {
-            return new ResponseEntity<Customer>(c, HttpStatus.OK);
+            return new ResponseEntity<UserResponse>(new UserResponse(u.getUsername(), u.getEmail(), c.getPhoneNumber(), c.getWalletAmount()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
