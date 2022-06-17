@@ -1,6 +1,7 @@
 package com.dinnerdash.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,16 +28,15 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrderController {
     @Autowired
     OrdersRepository ordersRepository;
     @Autowired
     OrderItemsRepository orderItemsRepository;
 
-
     @GetMapping("/getByCustomer/{userId}")
-    public ResponseEntity<List<OrderResponse>> getByUser(@PathVariable("userId") int id){
+    public ResponseEntity<List<OrderResponse>> getByUser(@PathVariable("userId") int id) {
         List<Orders> orders = ordersRepository.findByCustomer(id);
         List<OrderResponse> res = new ArrayList<OrderResponse>();
 
@@ -44,6 +44,7 @@ public class OrderController {
             OrderResponse temp = new OrderResponse();
             temp.setOrder(o);
             temp.setItems(orderItemsRepository.findByOrder(o.getOrderId()));
+            temp.id = o.getOrderId();
             res.add(temp);
         });
 
@@ -62,7 +63,7 @@ public class OrderController {
     }
 
     @GetMapping("/getByRestaurant/{resId}")
-    public ResponseEntity<List<OrderResponse>> getByRestaurant(@PathVariable("resId") int id){
+    public ResponseEntity<List<OrderResponse>> getByRestaurant(@PathVariable("resId") int id) {
         List<Orders> orders = ordersRepository.findByRestaurant(id);
         List<OrderResponse> res = new ArrayList<OrderResponse>();
 
@@ -70,15 +71,21 @@ public class OrderController {
             OrderResponse temp = new OrderResponse();
             temp.setOrder(o);
             temp.setItems(orderItemsRepository.findByOrder(o.getOrderId()));
+            temp.id = o.getOrderId();
             res.add(temp);
         });
 
-        return new ResponseEntity<List<OrderResponse>>(res, HttpStatus.OK);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Access-Control-Expose-Headers", "Content-Range");
+        headers.set("Content-Range", "orders " + orders.size() + "/" + orders.size());
+
+        return new ResponseEntity<List<OrderResponse>>(res, headers, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public int makeOrder(@RequestBody OrderResponse req){
-        int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+    public int makeOrder(@RequestBody OrderResponse req) {
+        int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getId();
         Orders temp = req.getOrder();
         temp.setCustomerId(userId);
         req.setOrder(temp);
@@ -92,14 +99,46 @@ public class OrderController {
         return orderId;
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<OrderResponse>> getAll() {
+        // get resturant id
+        int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getId();
+        ResponseEntity<List<OrderResponse>> t = getByRestaurant(restaurantId);
+
+        return t;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponse> getByOrderId(@PathVariable("id") int id) {
+        // get resturant id
+        int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getId();
+
+        Orders o = ordersRepository.findByIdAndRestaurant(id, restaurantId);
+        OrderResponse temp = new OrderResponse();
+        temp.setOrder(o);
+        temp.setItems(orderItemsRepository.findByOrder(o.getOrderId()));
+        temp.id = o.getOrderId();
+
+        return new ResponseEntity<OrderResponse>(temp, HttpStatus.OK);
+
+    }
+
     @DeleteMapping("/{orderId}")
-    public int removeOrder(@PathVariable("orderId") int id){
+    public int removeOrder(@PathVariable("orderId") int id) {
         return ordersRepository.remove(id);
     }
 
-    //Only changes the status of the order.
+    // Only changes the status of the order.
+    @PutMapping("/{orderId}")
+    public int changeStatus(@PathVariable("orderId") int id, @RequestBody OrderResponse req) {
+        return ordersRepository.changeStatus(id, req.getOrder().getOrderStatus());
+    }
+
+    // Only changes the status of the order.
     @PutMapping("/{orderId}/{status}")
-    public int changeStatus(@PathVariable("orderId") int id, @PathVariable("status") String status){
-        return ordersRepository.changeStatus(id, status);   
+    public int changeStatus(@PathVariable("orderId") int id, @PathVariable("status") String status) {
+        return ordersRepository.changeStatus(id, status);
     }
 }

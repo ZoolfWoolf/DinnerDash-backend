@@ -12,6 +12,8 @@ public interface OrdersRepository {
 
     Orders findById(int orderId);
 
+    Orders findByIdAndRestaurant(int id, int restaurantId);
+
     List<Orders> findByCustomer(int customerId);
 
     int remove(int orderId);

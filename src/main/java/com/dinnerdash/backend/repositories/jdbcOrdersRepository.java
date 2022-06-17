@@ -23,13 +23,20 @@ public class jdbcOrdersRepository implements OrdersRepository {
                 "Insert into Orders (CustomerID, RestaurantID, OrderTime, PaymentMethod, OrderStatus) values (?,?,?,?,?)",
                 order.getCustomerId(), order.getRestaurantId(),
                 order.getOrderTime(), order.getPaymentMethod(), order.getOrderStatus());
-        return db.queryForObject("Select MAX(OrderID) from Orders where CustomerID=?", Integer.class, order.getCustomerId());
+        return db.queryForObject("Select MAX(OrderID) from Orders where CustomerID=?", Integer.class,
+                order.getCustomerId());
     }
 
     @Override
     public List<Orders> findByRestaurant(int restaurantId) {
         return db.query("Select * from Orders where RestaurantID=?",
                 BeanPropertyRowMapper.newInstance(Orders.class), restaurantId);
+    }
+
+    @Override
+    public Orders findByIdAndRestaurant(int id, int restaurantId) {
+        return db.queryForObject("Select * from Orders where OrderID=? AND RestaurantID=?",
+                BeanPropertyRowMapper.newInstance(Orders.class), id, restaurantId);
     }
 
     @Override
@@ -40,7 +47,8 @@ public class jdbcOrdersRepository implements OrdersRepository {
 
     @Override
     public int remove(int orderId) {
-        return db.update("Delete from OrderItems where OrderID=?; Delete from Orders where OrderID=?", orderId, orderId);
+        return db.update("Delete from OrderItems where OrderID=?; Delete from Orders where OrderID=?", orderId,
+                orderId);
     }
 
     @Override
