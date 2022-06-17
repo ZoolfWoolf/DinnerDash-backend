@@ -4,19 +4,21 @@ public class Orders {
     private int orderId;
     private int customerId;
     private int restaurantId;
-    private String time;
+    private String orderTime;
     private String paymentMethod;
-    private String status;
+    private String orderStatus;
 
     public Orders() {
     }
 
-    public Orders(int customerId, int resId, String time, String paymentMethod, String status) {
+
+    public Orders(int orderId, int customerId, int restaurantId, String orderTime, String paymentMethod, String orderStatus) {
+        this.orderId = orderId;
         this.customerId = customerId;
-        this.time = time;
-        this.restaurantId = resId;
+        this.restaurantId = restaurantId;
+        this.orderTime = orderTime;
         this.paymentMethod = paymentMethod;
-        this.status = status;
+        this.orderStatus = orderStatus;
     }
 
     public int getOrderId() {
@@ -35,20 +37,20 @@ public class Orders {
         this.customerId = customerId;
     }
 
-    public String getTime() {
-        return this.time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public int getRestaurantId() {
         return this.restaurantId;
     }
 
     public void setRestaurantId(int restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    public String getOrderTime() {
+        return this.orderTime;
+    }
+
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
     }
 
     public String getPaymentMethod() {
@@ -59,11 +61,12 @@ public class Orders {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getStatus() {
-        return this.status;
+    public String getOrderStatus() {
+        return this.orderStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
+   
 }
