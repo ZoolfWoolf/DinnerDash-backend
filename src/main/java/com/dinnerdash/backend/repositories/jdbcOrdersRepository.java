@@ -38,4 +38,14 @@ public class jdbcOrdersRepository implements OrdersRepository {
                 BeanPropertyRowMapper.newInstance(Orders.class), custId);
     }
 
+    @Override
+    public int remove(int orderId) {
+        return db.update("Delete from OrderItems where OrderID=?; Delete from Orders where OrderID=?", orderId, orderId);
+    }
+
+    @Override
+    public int changeStatus(int orderId, String status) {
+        return db.update("Update Orders set OrderStatus=? where OrderID=?", status, orderId);
+    }
+
 }
