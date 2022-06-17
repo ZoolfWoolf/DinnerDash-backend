@@ -92,6 +92,7 @@ public class AuthController {
 
 	@PostMapping("/restaurantSignup")
 	public ResponseEntity<?> registerRestaurant(@Valid @RequestBody RestaurantSignupRequest signUpRequest) {
+		System.out.println("SIGNUP RESTAURANT");
 		ResponseEntity<?> checkIfAlreadyExists = signupHelper(signUpRequest.getUsername(), signUpRequest.getEmail());
 		if (checkIfAlreadyExists != null) {
 			return checkIfAlreadyExists;
