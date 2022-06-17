@@ -51,7 +51,7 @@ public class OrderController {
         return new ResponseEntity<List<OrderResponse>>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping("/getOne/{orderId}")
     public ResponseEntity<OrderResponse> getByOrder(@PathVariable("orderId") int id){
         Orders order = ordersRepository.findById(id);
         OrderResponse res = new OrderResponse();
