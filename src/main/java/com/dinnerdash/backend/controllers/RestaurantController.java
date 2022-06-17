@@ -2,13 +2,16 @@ package com.dinnerdash.backend.controllers;
 
 import com.dinnerdash.backend.models.Restaurant;
 import com.dinnerdash.backend.repositories.RestaurantRepository;
+import com.dinnerdash.backend.security.services.UserDetailsImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +43,17 @@ public class RestaurantController {
     public ResponseEntity<List<Restaurant>> getAll() {
         System.out.println("GET ALL Restaurants");
 
-        List<Restaurant> list = restaurantRepository.findAll();
+        List<Restaurant> list;
+        try {
+            // get retaurant id
+            int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                    .getId();
+            list = new ArrayList<Restaurant>();
+            list.add(restaurantRepository.getById(restaurantId));
+        } catch (Exception e) {
+            // TODO: handle exception
+            list = restaurantRepository.findAll();
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.set("Access-Control-Expose-Headers", "Content-Range");
         headers.set("Content-Range", "restaurants " + list.size() + "/" + list.size());
