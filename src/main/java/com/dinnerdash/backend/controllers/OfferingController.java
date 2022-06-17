@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +39,7 @@ public class OfferingController {
 
     @PreAuthorize("hasRole('RESTAURANT')")
     @PostMapping(value = "/removeOffering/{offeringId}")
-    public ResponseEntity<Integer> removeItem(@PathVariable("offeringId") int offeringId) {
-        int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+    public ResponseEntity<Integer> removeItem(@PathVariable("offeringId") int offeringId, int userId) {
         System.out.println(offeringId);
         int response = 0;
         try {
@@ -61,8 +59,11 @@ public class OfferingController {
         Offering temp = new Offering(userId, addToCart.getOfferingName(), addToCart.getOfferingDescription(),
                 addToCart.getPrice(), addToCart.getOfferingPhotoUrl());
         try {
-            offeringRepository.save(temp);
+            Offering wow = offeringRepository.save(temp);
+            System.out.println("ID is: " + wow.getOfferingId());
+            temp.setOfferingId(wow.getOfferingId());
         } catch (Exception e) {
+            System.out.println("Crashed");
         }
         return new ResponseEntity<>(temp, HttpStatus.OK);
     }
@@ -144,7 +145,8 @@ public class OfferingController {
     @PreAuthorize("hasRole('RESTAURANT')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Integer> delete(@PathVariable("id") int id) {
-        return removeItem(id);
+        int userId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return removeItem(id, userId);
     }
 
     @GetMapping(value = "/{restaurantId}/{offeringId}")

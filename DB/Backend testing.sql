@@ -14,12 +14,13 @@ use dinnerdash
 
 
 -- Adding an offering and adding it to cart
-select * from Cart	
+select * from Cart
 select * from Customer
 select * from users
 select * from Restaurant
 select * from Orders
 select * from Offering
+select * from user_roles
 
 	
 -- delete from roles where id>2

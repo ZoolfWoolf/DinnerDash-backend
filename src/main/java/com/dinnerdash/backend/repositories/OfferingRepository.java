@@ -6,7 +6,7 @@ import com.dinnerdash.backend.models.Offering;
 
 //All the Customer realated functions.
 public interface OfferingRepository {
-    int save(Offering offering);
+    Offering save(Offering offering);
 
     List<Offering> findByRestaurant(int restaurantID);
 

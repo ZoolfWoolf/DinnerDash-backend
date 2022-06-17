@@ -39,14 +39,14 @@ public class jdbcRestaurantRepository implements RestaurantRepository {
 
     @Override
     public Restaurant getById(int id) {
-        return db.queryForObject("Select * from Restaurant where RestaurantID=?",
+        return db.queryForObject("Select * from Restaurant where RestaurantID=?",   
                 BeanPropertyRowMapper.newInstance(Restaurant.class), id);
     }
 
     @Override
     public int remove(int id) {
         return db.update(
-                "Delete from Restaurant where RestaurantID=?; Delete from users where id=?; Delete from Offering where RestaurantID=?",
-                id, id, id);
+                "Delete from Restaurant where RestaurantID=?;Delete from user_roles where user_id=? ;Delete from users where id=?; Delete from Offering where RestaurantID=?",
+                id, id, id, id);
     }
 }

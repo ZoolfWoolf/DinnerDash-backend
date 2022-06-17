@@ -23,11 +23,18 @@ public class jdbcOfferingRepository implements OfferingRepository {
     }
 
     @Override
-    public int save(Offering offering) {
-        return db.update(
+    public Offering save(Offering offering) {
+        db.update(
                 "Insert into Offering (RestaurantID, OfferingName, OfferingDescription, Price, OfferingPhotoURL) values (?,?,?,?,?)",
                 offering.getRestaurantId(), offering.getOfferingName(),
                 offering.getOfferingDescription(), offering.getPrice(), offering.getOfferingPhotoUrl());
+
+                System.out.println("Here");
+                Offering temp = db.queryForObject("Select * from Offering where RestaurantID=? AND OfferingName=?", BeanPropertyRowMapper.newInstance(Offering.class), offering.getRestaurantId(), offering.getOfferingName()
+                );
+
+                System.out.println("Name: " + temp.getOfferingName());
+                return temp;
     }
 
     @Override

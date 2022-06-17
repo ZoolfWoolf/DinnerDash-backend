@@ -83,13 +83,11 @@ public class RestaurantController {
 
         int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
                 .getId();
+
         if (restaurantId == id) {
-
-            ResponseEntity<Restaurant> obj = new ResponseEntity<Restaurant>(restaurantRepository.getById(id),
-                    HttpStatus.OK);
+            Restaurant obj = restaurantRepository.getById(id);
             restaurantRepository.remove(id);
-            return obj;
-
+            return new ResponseEntity<Restaurant>(obj, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
