@@ -13,4 +13,6 @@ public interface RestaurantRepository {
     List<Restaurant> findAll();
 
     Restaurant getById(int id);
+
+    int remove(int id);
 }
