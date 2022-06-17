@@ -45,6 +45,8 @@ public class jdbcRestaurantRepository implements RestaurantRepository {
 
     @Override
     public int remove(int id) {
-        return db.update("Delete from Restaurant where RestaurantID=?; Delte from users where id=?", id, id);
+        return db.update(
+                "Delete from Restaurant where RestaurantID=?; Delete from users where id=?; Delete from Offering where RestaurantID=?",
+                id, id, id);
     }
 }
