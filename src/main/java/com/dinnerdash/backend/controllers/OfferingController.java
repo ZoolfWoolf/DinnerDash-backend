@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -138,6 +139,14 @@ public class OfferingController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<Offering> modify(@PathVariable String id, @RequestBody Offering entity) {
         return modifyItem(entity);
+    }
+
+    @PreAuthorize("hasRole('RESTAURANT')")
+    @DeleteMapping(value = "/{id}")
+    public int delete(@PathVariable("id") int id) {
+        int restaurantId = ((UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+                .getId();
+        return offeringRepository.remove(restaurantId, id);
     }
 
     @GetMapping(value = "/{restaurantId}/{offeringId}")
