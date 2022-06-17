@@ -1,0 +1,7 @@
+Server: sql6.freemysqlhosting.net
+Name: sql6500404
+Username: sql6500404
+Password: yH2upYvC1C
+Port number: 3306
+
+5MB only
