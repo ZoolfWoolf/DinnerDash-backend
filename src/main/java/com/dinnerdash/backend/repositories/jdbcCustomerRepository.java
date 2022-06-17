@@ -46,7 +46,10 @@ public class jdbcCustomerRepository implements CustomerRepository {
         if (money <= amount) {
             money = 0;
         }
-        return db.update("Update Customer set WalletAmount = WalletAmount + ? where CustomerID=?", money, id);
+        else {
+            money = money - amount;
+        }
+        return db.update("Update Customer set WalletAmount = ? where CustomerID=?", money, id);
     }
 
     @Override
